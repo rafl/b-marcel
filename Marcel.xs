@@ -171,11 +171,15 @@ static OP *
 invoke_cb (pTHX_ OP *o, void *user_data)
 {
   dSP;
+  SV *opsv;
 
   ENTER;
   SAVETMPS;
 
   PUSHMARK(SP);
+  opsv = sv_newmortal();
+  sv_setiv(newSVrv(opsv, opclassnames[cc_opclass(aTHX_ o)]), PTR2IV(o));
+  XPUSHs(opsv);
   PUTBACK;
 
   call_sv((SV *)user_data, G_VOID | G_DISCARD);
